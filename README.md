@@ -60,45 +60,28 @@ These involve simple data retrieval, filtering, and basic aggregations:
 - Retrieve tracks with more than 1 billion streams.
 - List all albums and their respective artists.
 - Count total comments for tracks marked as licensed.
+- Find all tracks that belong to the album type single.
+- Count the total number of tracks by each artist.
 
 #### Medium Queries
 These include grouping, aggregations, and joins:
 - Calculate the average danceability for tracks in each album.
 - Find the top 5 tracks with the highest energy values.
 - Retrieve tracks along with their views and likes for official videos.
+- List all tracks along with their views and likes where official_video = TRUE.
+- For each album, calculate the total views of all associated tracks.
 
 #### Advanced Queries
 These queries involve subqueries, window functions, and CTEs:
 - Use window functions to find the top 3 most-viewed tracks for each artist.
 - Identify tracks with above-average liveness scores.
 - Use a `WITH` clause to calculate the difference between the highest and lowest energy values for tracks in each album.
+- Calculate the difference between the highest and lowest energy values for tracks in each album.
+- Calculate the cumulative sum of likes for tracks ordered by the number of views, using window functions.
 
-### 3. Query Optimization
-To optimize query performance, we focus on the following techniques:
+### 3. Practice Questions
 
-#### Indexing
-- **Create Index on Frequently Queried Columns**: For instance, indexing the **artist** column speeds up query retrieval.
-  
-#### Execution Plan Analysis
-- Use `EXPLAIN ANALYZE` to review and optimize query performance.
-
-#### Query Execution Plan Before and After Optimization:
-- **Before Indexing**: Execution time (E.T.): **7 ms**, Planning time (P.T.): **0.17 ms**.
-  
-- **After Indexing**: Execution time (E.T.): **0.153 ms**, Planning time (P.T.): **0.152 ms**.
-
-#### Visual Performance Comparison
-- **Graphical comparison** showing a significant reduction in execution time after indexing.
-
-![EXPLAIN Before Index](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_explain_before_index.png?raw=true)
-![EXPLAIN After Index](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_explain_after_index.png?raw=true)
-![Performance Graph](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_graphical%20view%203.png?raw=true)
-
----
-
-## Practice Questions
-
-### Easy Level
+#### Easy Level
 1. Retrieve the names of all tracks with more than 1 billion streams.
 ```sql
 SELECT track FROM spotify WHERE stream > 1000000000;
@@ -120,7 +103,7 @@ SELECT track FROM spotify WHERE album_type = 'single';
 SELECT artist, COUNT(track) AS total_by_each_artist FROM spotify GROUP BY artist;
 ```
 
-### Medium Level
+#### Medium Level
 1. Calculate the average danceability of tracks in each album.
 ```sql
 SELECT album, AVG(danceability) AS average_value FROM spotify GROUP BY album ORDER BY average_value DESC;
@@ -145,8 +128,7 @@ COALESCE(SUM(CASE WHEN most_played_on = 'Spotify' THEN stream END),0) AS spotify
 WHERE spotifyy > youtube AND youtube <> 0;
 ```
 
-### Advanced Level
-
+#### Advanced Level
 1. **Find the top 3 most-viewed tracks for each artist using window functions.**
 ```sql
 WITH top_artists AS
@@ -154,24 +136,20 @@ WITH top_artists AS
 FROM spotify GROUP BY artist, track)
 SELECT * FROM top_artists WHERE rank <= 3;
 ```
-
 2. **Retrieve tracks where the liveness score is above average.**
 ```sql
 SELECT track, liveness FROM spotify WHERE liveness > (SELECT AVG(liveness) AS avg_liveness FROM spotify);
 ```
-
 3. **Calculate the difference between the highest and lowest energy values for tracks in each album.**
 ```sql
 WITH outt AS
 (SELECT album, MAX(energy) AS highest, MIN(energy) AS lowest FROM spotify GROUP BY album)
 SELECT album, highest - lowest AS total FROM outt ORDER BY total DESC;
 ```
-
 4. **Find tracks with an energy-to-liveness ratio greater than 1.2.**
 ```sql
 SELECT * FROM (SELECT track, energy, liveness, (energy/liveness) AS ratio FROM spotify) WHERE ratio > 1.2;
 ```
-
 5. **Calculate the cumulative sum of likes for tracks ordered by the number of views, using window functions.**
 ```sql
 SELECT track, likes, views, 
@@ -179,6 +157,30 @@ SELECT track, likes, views,
 FROM spotify
 ORDER BY views DESC;
 ```
+
+---
+
+### 4. Query Optimization
+
+To optimize query performance, we focus on the following techniques:
+
+#### Indexing
+- **Create Index on Frequently Queried Columns**: For instance, indexing the **artist** column speeds up query retrieval.
+  
+#### Execution Plan Analysis
+- Use `EXPLAIN ANALYZE` to review and optimize query performance.
+
+#### Query Execution Plan Before and After Optimization:
+- **Before Indexing**: Execution time (E.T.): **7 ms**, Planning time (P.T.): **0.17 ms**.
+  
+- **After Indexing**: Execution time (E.T.): **0.153 ms**, Planning time (P.T.): **0.152 ms**.
+
+#### Visual Performance Comparison
+- **Graphical comparison** showing a significant reduction in execution time after indexing.
+
+![EXPLAIN Before Index](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_explain_before_index.png?raw=true)
+![EXPLAIN After Index](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_explain_after_index.png?raw=true)
+![Performance Graph](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_graphical%20view%203.png?raw=true)
 
 ---
 
