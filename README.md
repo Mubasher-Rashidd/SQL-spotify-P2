@@ -209,7 +209,7 @@ To improve query performance, we carried out the following optimization process:
     - **Graph view** shows the significant drop in both execution and planning times:
       ![Performance Graph](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_graphical%20view%203.png?raw=true)
       ![Performance Graph](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_graphical%20view%202.png?raw=true)
-      ![Performance Graph](https://github.com/najirh/najirh-Spotify-Data-Analysis-using-SQL/blob/main/spotify_graphical%20view%201.png)
+      ![Performance Graph](https://github.com/Mubasher-Rashidd/SQL-spotify-P2/blob/main/spotify_graphical%20view%201.png?raw=true)
 
 This optimization shows how indexing can drastically reduce query time, improving the overall performance of our database operations in the Spotify project.
 ---
@@ -238,7 +238,3 @@ This optimization shows how indexing can drastically reduce query time, improvin
 ## Contributing
 If you would like to contribute to this project, feel free to fork the repository, submit pull requests, or raise issues.
 
----
-
-## License
-This project is licensed under the MIT License.
